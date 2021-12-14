@@ -7,12 +7,20 @@ import { dbCreds } from '../config.ts'
 const client = new Client(dbCreds);
 
 
-const addUser = async ({ request, response }: {request: any, response: any }) => {
+const addUser = async ({ request, response }: { request: any, response: any }) => {
    
     const body = await request.body();
-    // console.log(body);
+    
     const user = await body.value
-    console.log(user)
+    console.log(`user 1 ${user}`)
+    const userBody = () => {
+        const array = [];
+        for (const [key, value] of user) {
+            array.push(value)
+        }
+        return array;
+    }
+    const userInfo = userBody()
     if (!request.hasBody) {
         response.status = 400
         response.body = {
@@ -24,20 +32,20 @@ const addUser = async ({ request, response }: {request: any, response: any }) =>
         await client.connect()
         const salt = await bcrypt.genSalt(8);
         const hash = await bcrypt.hash(user.password, salt);
-        console.log(`hash: ${hash}`); 
+
         const result = await client.queryArray("INSERT INTO registration(username, password, email, firstname, lastname) VALUES($1,$2,$3,$4,$5) RETURNING id", 
-        user.username, 
+        userInfo[0], 
         hash,
-        user.email,
-        user.firstname,
-        user.lastname)
+        userInfo[2],
+        userInfo[3],
+        userInfo[4])
 
         response.status = 201
         response.body = {
             success: true,
-            data: user
+            data: response.redirect("/login")
         }
-        console.log(user)
+       console.log(user)
     } catch (err) {
         response.status = 500
         response.body = {
@@ -51,10 +59,22 @@ const addUser = async ({ request, response }: {request: any, response: any }) =>
 }
 
 
+
 const loginUser = async ({ request, response, cookies }: {request: any, response: any, cookies: any }) => {
     const body = await request.body();
     const user = await body.value
-    const { username, password } = user;
+    const userBody = () => {
+        const array = [];
+        for (const [key, value] of user) {
+            array.push(value)
+        }
+        return array;
+    }
+    const userInfo = userBody()
+    console.log(userInfo)
+    const username = userInfo[0];
+    const password = userInfo[1];
+
     if (!username || !password) {
         response.status = 400
         response.body = {
@@ -64,7 +84,7 @@ const loginUser = async ({ request, response, cookies }: {request: any, response
     } else {
         try {
         await client.connect()
-
+  
         const result: any = await client.queryObject(`SELECT * FROM registration WHERE username = '${username}'`)
         const isValid = await bcrypt.compare(password, result.rows[0].password);
         console.log(`isValid: ${isValid}`);    
@@ -83,7 +103,7 @@ const loginUser = async ({ request, response, cookies }: {request: any, response
             response.status = 201
             response.body = {
                 message: 'success',
-                data: "You have entered a correct password"
+                data: response.redirect("/store")
             };
         }
         else {
