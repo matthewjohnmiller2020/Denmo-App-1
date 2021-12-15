@@ -4,7 +4,9 @@
         <title>The Generics | Store</title>
         <meta name="description" content="This is the description">
         <link rel="stylesheet" href="styles.css" />
-        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        <script src="https://checkout.stripe.com/checkout.js" defer></script>
         <script>
             if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
@@ -156,46 +158,36 @@ function updateCartTotal() {
         </script>
     </head>
     <body>
-        <!-- <header class="main-header">
-            <nav class="main-nav nav">
-                <ul>
-                    <li><a href="index.html">HOME</a></li>
-                    <li><a href="store.html">STORE</a></li>
-                    <li><a href="about.html">ABOUT</a></li>
-                </ul>
-            </nav>
-            <h1 class="band-name band-name-large">The Generics</h1>
-        </header> -->
         <section class="container content-section">
-            <h2 class="section-header">SWAG</h2>
+            <h2 class="section-header">CLOTHING</h2>
             <div class="shop-items">
                 <div class="shop-item">
                     <span class="shop-item-title">Blue Shirt</span>
-                    <img class="shop-item-image" src="Images/Album 1.png">
+                    <img class="shop-item-image" src="https://images.freeimages.com/images/large-previews/36d/t-shirt-1426871.jpg" width="200" height="250">
                     <div class="shop-item-details">
                         <span class="shop-item-price">$9.99</span>
                         <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
                     </div>
                 </div>
                 <div class="shop-item">
-                    <span class="shop-item-title">Album 2</span>
-                    <img class="shop-item-image" src="Images/Album 2.png">
+                    <span class="shop-item-title">Red Shirt</span>
+                    <img class="shop-item-image" src="https://images.freeimages.com/images/large-previews/565/shirt-1425090.jpg" width="200" height="250">
                     <div class="shop-item-details">
                         <span class="shop-item-price">$14.99</span>
                         <button class="btn btn-primary shop-item-button"type="button">ADD TO CART</button>
                     </div>
                 </div>
                 <div class="shop-item">
-                    <span class="shop-item-title">Album 3</span>
-                    <img class="shop-item-image" src="Images/Album 3.png">
+                    <span class="shop-item-title">Grey Tie</span>
+                    <img class="shop-item-image" src="https://images.freeimages.com/images/large-previews/fa0/tieshot-9-1239879.jpg" width="200" height="300">
                     <div class="shop-item-details">
                         <span class="shop-item-price">$9.99</span>
                         <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
                     </div>
                 </div>
                 <div class="shop-item">
-                    <span class="shop-item-title">Album 4</span>
-                    <img class="shop-item-image" src="Images/Album 4.png">
+                    <span class="shop-item-title">Blue Tie</span>
+                    <img class="shop-item-image" src="https://images.freeimages.com/images/large-previews/6f9/tieshot-1-1239894.jpg" width="200" height="300">
                     <div class="shop-item-details">
                         <span class="shop-item-price">$19.99</span>
                         <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
@@ -207,16 +199,16 @@ function updateCartTotal() {
             <h2 class="section-header">MERCH</h2>
             <div class="shop-items">
                 <div class="shop-item">
-                    <span class="shop-item-title">T-Shirt</span>
-                    <img class="shop-item-image" src="Images/Shirt.png">
+                    <span class="shop-item-title">Kilt Purse</span>
+                    <img class="shop-item-image" src="https://images.freeimages.com/images/large-previews/019/kilt-purse-1538779.jpg" width="200" height="250">
                     <div class="shop-item-details">
                         <span class="shop-item-price">$19.99</span>
                         <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
                     </div>
                 </div>
                 <div class="shop-item">
-                    <span class="shop-item-title">Coffee Cup</span>
-                    <img class="shop-item-image" src="Images/Cofee.png">
+                    <span class="shop-item-title">Creepy Child Statue</span>
+                    <img class="shop-item-image" src="https://images.freeimages.com/images/large-previews/8c2/child-statue-1227151.jpg" width="200" height="200">
                     <div class="shop-item-details">
                         <span class="shop-item-price">$6.99</span>
                         <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
@@ -239,27 +231,6 @@ function updateCartTotal() {
             </div>
             <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
         </section>
-        <!-- <footer class="main-footer">
-            <div class="container main-footer-container">
-                <h3 class="band-name">The Generics</h3>
-                <ul class="nav footer-nav">
-                    <li>
-                        <a href="https://www.youtube.com" target="_blank">
-                            <img src="Images/YouTube Logo.png">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.spotify.com" target="_blank">
-                            <img src="Images/Spotify Logo.png">
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.facebook.com" target="_blank">
-                            <img src="Images/Facebook Logo.png">
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </footer> -->
+
     </body>
 </html>

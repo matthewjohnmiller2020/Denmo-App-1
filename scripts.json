@@ -5,7 +5,7 @@
   },
   "scripts": {
     "start": {
-      "cmd": "deno run --allow-read --unstable server.ts",
+      "cmd": "deno run --allow-read --allow-write --unstable server.ts",
       "allow": [
         "env",
         "net"

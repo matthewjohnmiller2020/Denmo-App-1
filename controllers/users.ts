@@ -109,7 +109,7 @@ const loginUser = async ({ request, response, cookies }: {request: any, response
         else {
           response.body = {
             success: false,
-            data: "You have entered an incorrect password"    
+            data: response.redirect("/login")   
           }
         }
     } catch (err) {

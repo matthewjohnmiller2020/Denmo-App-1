@@ -1,6 +1,5 @@
 import { Client } from "https://deno.land/x/postgres/mod.ts"
 import { dbCreds } from '../config.ts'
-import * as dejs from "https://deno.land/x/dejs@0.10.2/mod.ts";
 
 const client = new Client(dbCreds);
 
