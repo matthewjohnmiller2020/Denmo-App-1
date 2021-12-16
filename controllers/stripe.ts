@@ -1,14 +1,37 @@
 // import { config } from "https://deno.land/x/dotenv/mod.ts";
+// import { Stripe } from "https://esm.sh/stripe?target=deno"
+
 
 // const obj = config()
-// const publicKey = Object.values(obj)[1]
-// const stripe = Object.values(obj)[2]
+// const pubKey = Object.values(obj)[1]
+// const stripe = Stripe(Object.values(obj)[2], {
+//     httpClient: Stripe.createFetchHttpClient()
+// })
+
+// async function handler(request:any) {
+//     const session = await stripe.checkout.session.create({
+//         success_url: 'http://localhost:3000/success',
+//         cancel_url: 'http://localhost:3000/cancel',
+//         line_items: [{
+//             price_data: {
+//                 currency: 'usd',
+//                 product_data: {
+//                     name: 'Blue shirt'
+//                 },
+//                 unit_amount: 2000,
+//             },
+//             quantity: 1,
+//         }],
+//         medo: 'payment',
+//     })
+//     return Response.redirect(session.url, 303)
+// }
 
 // const storeRender = async (ctx:any, response:any) => {
 //     const data = await Deno.readTextFile('items.json')
 //       try {
 //         ctx.render('store.ejs', {
-//             stripePublicKey: publicKey,
+//             stripePublicKey: pubKey,
 //             items: JSON.parse(data)
 //           })
 //       } catch (error) {
@@ -45,4 +68,6 @@
 //       }
 // }
 
-// export { storeRender }
+// export { storeRender, purchase }
+
+// export { handler }

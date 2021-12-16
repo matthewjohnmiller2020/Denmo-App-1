@@ -1,9 +1,14 @@
 import { Application } from "https://deno.land/x/oak/mod.ts"
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import onyx from 'https://deno.land/x/onyx/mod.ts'
+import { DashportOak } from 'https://deno.land/x/dashport@v1.2.1/mod.ts';
+import { googStrat, serializerA, deserializerA } from './dashportConfig.ts';
+
+
+
+// import onyx from 'https://deno.land/x/onyx/mod.ts'
 // import { connect } from "https://deno.land/x/redis/mod.ts";
 // import { OakSession, RedisStore } from "https://deno.land/x/sessions/mod.ts";
-import { Session } from "https://deno.land/x/session/mod.ts";
+// import { Session } from "https://deno.land/x/session/mod.ts";
 // import {
 //     viewEngine,
 //     engineFactory,
@@ -15,15 +20,18 @@ import router from './routes.ts'
 // const oakAdapter = adapterFactory.getOakAdapter();
 
 
-const port =  Deno.env.get("PORT") || 3000
+
+const port: String|any =  Deno.env.get("PORT") || 3000
 const app = new Application()
 
-const session: Session = new Session({ framework: "oak" });
-await session.init();
+const dashport: any = new DashportOak(app);
+
+// const session: Session = new Session({ framework: "oak" });
+// await session.init();
 
 // Adding the Session middleware. Now every context will include a property
 // called session that you can use the get and set functions on
-app.use(session.use()(session));
+// app.use(session.use()(session));
 
 // const store:any = new RedisStore({
 //   host: '127.0.0.1',
@@ -61,25 +69,25 @@ app.use(oakCors({
     origin: /^.+localhost:(3000)$/,
 }))
 
-app.addEventListener('error', evt => {
-    console.log(evt.error);
-  });
+// app.addEventListener('error', evt => {
+//     console.log(evt.error);
+//   });
 
-  router.get("/", async (context) => {
+//   router.get("/", async (context) => {
 
-    // Examples of getting and setting variables on a session
-    if (!await context.state.session.has("pageCount")) {
-        await context.state.session.set("pageCount", 0);
+//     // Examples of getting and setting variables on a session
+//     if (!await context.state.session.has("pageCount")) {
+//         await context.state.session.set("pageCount", 0);
 
-    } else {
-        await context.state.session.set("pageCount", await context.state.session.get("pageCount") + 1);
-    }
+//     } else {
+//         await context.state.session.set("pageCount", await context.state.session.get("pageCount") + 1);
+//     }
 
-    // If you only want a variable to survive for a single request, you can "flash" it instead
-    await context.state.session.flash("message", "I am good for form validations errors, success messages, etc.")
+//     // If you only want a variable to survive for a single request, you can "flash" it instead
+//     await context.state.session.flash("message", "I am good for form validations errors, success messages, etc.")
     
-    context.response.body = `Visited page ${await context.state.session.get("pageCount")} times`;
-});
+//     context.response.body = `Visited page ${await context.state.session.get("pageCount")} times`;
+// });
 
 app.use(router.routes())
 app.use(router.allowedMethods())
@@ -99,7 +107,18 @@ app.use(router.allowedMethods())
 //     next();
 // })
 
-// console.log(config());
+app.addEventListener("error", (evt) => {
+  console.log(evt.error);
+});
+
+router.get('/store', 
+  dashport.authenticate(googStrat, serializerA, deserializerA),
+  async (ctx: any, next: any) => {
+    ctx.response.body = 'This is a private page!';
+  }
+)
+
+
 console.log(`Server running on port ${port}`)
 
 await app.listen({port: +port})

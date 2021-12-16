@@ -1,8 +1,11 @@
 import { Router } from "https://deno.land/x/oak/mod.ts"
 import { addProduct, getProducts, getProduct, deleteProduct, addToCart, deleteFromtCart, getCartProducts } from './controllers/products.ts'
 import { addUser, loginUser, jwtLogin, logout  } from './controllers/users.ts'
-import { registerPage, loginPage, home, store } from './controllers/render.ts'
-// import { storeRender } from './controllers/stripe.ts'
+import { registerPage, loginPage, home } from './controllers/render.ts'
+import { userMiddleware } from './controllers/userMiddleware.ts'
+
+// import { storeRender, purchase } from './controllers/stripe.ts'
+// import { handler } from './controllers/stripe.ts'
 
 const router = new Router();
 
@@ -15,13 +18,21 @@ router.post('/api/products', addProduct)
       .post('/api/register', addUser)
       .post('/api/login', loginUser)
       .get('/api/user', jwtLogin)
-      .post('/api/logout', logout)
+      .get('/api/logout', logout)
       .patch('/api/addtocart/:id', addToCart)
       .patch('/api/deletefromcart/:id', deleteFromtCart)
       .get('/login', loginPage)
       .get('/register', registerPage)
-      .get('/store', store)
+      .get('/store', userMiddleware)
       .get('/', home)
+      // .get('/privatepage', dashport.authenticate(googStrat, serializerA, deserializerA),
+      //   async (ctx: any, next: any) => {
+      //   ctx.response.body = 'This is a private page!';
+      // })
+
+
+
+
       // .get('/store', storeRender)
 
       // router.post('/api/register', async (ctx: any) => {

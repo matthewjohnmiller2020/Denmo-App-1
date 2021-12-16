@@ -3,10 +3,9 @@
     <head>
         <title>The Generics | Store</title>
         <meta name="description" content="This is the description">
-        <link rel="stylesheet" href="styles.css" />
+        <!-- <link rel="stylesheet" href="styles.css" /> -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-        <script src="https://checkout.stripe.com/checkout.js" defer></script>
         <script>
             if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
@@ -32,60 +31,14 @@ function ready() {
         var button = addToCartButtons[i]
         button.addEventListener('click', addToCartClicked)
     }
-
-    document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
-}
-
-var stripeHandler = StripeCheckout.configure({
-    key: stripePublicKey,
-    locale: 'en',
-    token: function(token) {
-        var items = []
-        var cartItemContainer = document.getElementsByClassName('cart-items')[0]
-        var cartRows = cartItemContainer.getElementsByClassName('cart-row')
-        for (var i = 0; i < cartRows.length; i++) {
-            var cartRow = cartRows[i]
-            var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
-            var quantity = quantityElement.value
-            var id = cartRow.dataset.itemId
-            items.push({
-                id: id,
-                quantity: quantity
-            })
-        }
-
-        fetch('/purchase', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                stripeTokenId: token.id,
-                items: items
-            })
-        }).then(function(res) {
-            return res.json()
-        }).then(function(data) {
-            alert(data.message)
-            var cartItems = document.getElementsByClassName('cart-items')[0]
-            while (cartItems.hasChildNodes()) {
-                cartItems.removeChild(cartItems.firstChild)
-            }
-            updateCartTotal()
-        }).catch(function(error) {
-            console.error(error)
-        })
-    }
-})
-
-function purchaseClicked() {
-    var priceElement = document.getElementsByClassName('cart-total-price')[0]
-    var price = parseFloat(priceElement.innerText.replace('$', '')) * 100
-    stripeHandler.open({
-        amount: price
+    const logout = document.getElementById('logout-btn')
+        logout.addEventListener('click', ()=> {
+            fetch('http://localhost:3000/api/logout')
+            .then(window.location.href="http://localhost:3000/login")
     })
+
 }
+
 
 function removeCartItem(event) {
     var buttonClicked = event.target
@@ -231,6 +184,6 @@ function updateCartTotal() {
             </div>
             <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
         </section>
-
+        <button class="btn btn-primary btn-logout" type="submit" id="logout-btn">Logout</a></button>
     </body>
 </html>

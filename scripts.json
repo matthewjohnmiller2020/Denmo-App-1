@@ -5,10 +5,12 @@
   },
   "scripts": {
     "start": {
-      "cmd": "deno run --allow-read --allow-write --unstable server.ts",
+      "cmd": "deno run --unstable server.ts",
       "allow": [
         "env",
-        "net"
+        "net",
+        "read",
+        "write"
       ],
       "env": {
         "PORT": "3000"
