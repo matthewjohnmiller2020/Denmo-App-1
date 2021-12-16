@@ -2,6 +2,9 @@ import { Client } from "https://deno.land/x/postgres/mod.ts"
 import * as bcrypt from "https://deno.land/x/bcrypt@v0.2.4/mod.ts";
 import {create, decode } from "https://deno.land/x/djwt@v2.4/mod.ts"
 import "https://deno.land/x/dotenv/load.ts";
+import { renderFileToString } from "https://deno.land/x/dejs@0.10.2/mod.ts";
+import { dashport } from '../server.ts'
+import { ghStrat, serializerA, deserializerA } from '../dashportConfig.ts';
 import { dbCreds } from '../config.ts'
 
 const client = new Client(dbCreds);
@@ -176,5 +179,14 @@ const logout = async ({response, cookies}: {response: any, cookies: any}) => {
 }
 
 
+const gitHub = async ({response}: { response: any}) => {
+    dashport.authenticate(ghStrat, serializerA, deserializerA)
+    response.body = await renderFileToString(
+        `${Deno.cwd()}/views/store.ejs`,
+        {},
+      );
+    return 
+}
 
-export { addUser, loginUser, jwtLogin,  logout}
+
+export { addUser, loginUser, jwtLogin,  logout, gitHub }

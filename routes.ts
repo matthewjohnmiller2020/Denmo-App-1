@@ -1,8 +1,11 @@
 import { Router } from "https://deno.land/x/oak/mod.ts"
+import { renderFileToString } from "https://deno.land/x/dejs@0.10.2/mod.ts";
 import { addProduct, getProducts, getProduct, deleteProduct, addToCart, deleteFromtCart, getCartProducts } from './controllers/products.ts'
-import { addUser, loginUser, jwtLogin, logout  } from './controllers/users.ts'
-import { registerPage, loginPage, home } from './controllers/render.ts'
+import { addUser, loginUser, jwtLogin, logout, gitHub } from './controllers/users.ts'
+import { registerPage, loginPage, home, storePage } from './controllers/render.ts'
 import { userMiddleware } from './controllers/userMiddleware.ts'
+// import { dashport } from './server.ts'
+import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
 
 // import { storeRender, purchase } from './controllers/stripe.ts'
 // import { handler } from './controllers/stripe.ts'
@@ -10,7 +13,9 @@ import { userMiddleware } from './controllers/userMiddleware.ts'
 const router = new Router();
 
 
-router.post('/api/products', addProduct)
+router.get('/', home)
+      // .get('/store', storePage)
+      .post('/api/products', addProduct)
       .get('/api/products', getProducts)
       .get('/api/incart', getCartProducts)
       .get('/api/products/:id', getProduct)
@@ -23,8 +28,10 @@ router.post('/api/products', addProduct)
       .patch('/api/deletefromcart/:id', deleteFromtCart)
       .get('/login', loginPage)
       .get('/register', registerPage)
-      .get('/store', userMiddleware)
-      .get('/', home)
+      .get('/store', userMiddleware, storePage)
+ 
+   
+      
       // .get('/privatepage', dashport.authenticate(googStrat, serializerA, deserializerA),
       //   async (ctx: any, next: any) => {
       //   ctx.response.body = 'This is a private page!';

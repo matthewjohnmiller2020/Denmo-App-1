@@ -1,7 +1,9 @@
 import { Application } from "https://deno.land/x/oak/mod.ts"
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
 import { DashportOak } from 'https://deno.land/x/dashport@v1.2.1/mod.ts';
-import { googStrat, serializerA, deserializerA } from './dashportConfig.ts';
+import { renderFileToString } from "https://deno.land/x/dejs@0.10.2/mod.ts";
+import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
+
 
 
 
@@ -24,7 +26,34 @@ import router from './routes.ts'
 const port: String|any =  Deno.env.get("PORT") || 3000
 const app = new Application()
 
-const dashport: any = new DashportOak(app);
+export const dashport: any = new DashportOak(app);
+
+
+
+// router.get('./gitHub', dashport.authenticate(ghStrat, serializerA, deserializerA)), 
+// async (ctx: any, next: any) => {
+//   ctx.response.body = 'This is a private page!';
+// }
+
+// router.get('/auth/github/callback', 
+//   dashport.authenticate(ghStrat, serializerA, deserializerA),
+//   async (ctx: any, next: any) => {
+//     if (ctx.locals instanceof Error) {
+//       ctx.response.body = 'An Error occurred!';
+//     } else {
+//       const displayName = ctx.locals.displayName;
+//       ctx.response.body = `Welcome ${displayName}!`;
+//     }
+//   }
+// )
+
+
+// async (ctx: any) => {
+// ctx.response.body = await renderFileToString(
+//       `${Deno.cwd()}/views/store.ejs`,
+//       {},
+//       )
+    // }
 
 // const session: Session = new Session({ framework: "oak" });
 // await session.init();
@@ -111,12 +140,6 @@ app.addEventListener("error", (evt) => {
   console.log(evt.error);
 });
 
-router.get('/store', 
-  dashport.authenticate(googStrat, serializerA, deserializerA),
-  async (ctx: any, next: any) => {
-    ctx.response.body = 'This is a private page!';
-  }
-)
 
 
 console.log(`Server running on port ${port}`)
