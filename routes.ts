@@ -1,11 +1,13 @@
 import { Router } from "https://deno.land/x/oak/mod.ts"
 import { renderFileToString } from "https://deno.land/x/dejs@0.10.2/mod.ts";
 import { addProduct, getProducts, getProduct, deleteProduct, addToCart, deleteFromtCart, getCartProducts } from './controllers/products.ts'
-import { addUser, loginUser, jwtLogin, logout, gitHub } from './controllers/users.ts'
+import { addUser, loginUser, jwtLogin, logout } from './controllers/users.ts'
 import { registerPage, loginPage, home, storePage } from './controllers/render.ts'
 import { userMiddleware } from './controllers/userMiddleware.ts'
+import { OauthOne, OauthTwo } from './OauthControllers/gitHub.ts'
+import { LOauthOne, LOauthTwo } from './OauthControllers/LinkedIn.ts'
 // import { dashport } from './server.ts'
-import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
+// import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
 
 // import { storeRender, purchase } from './controllers/stripe.ts'
 // import { handler } from './controllers/stripe.ts'
@@ -14,7 +16,6 @@ const router = new Router();
 
 
 router.get('/', home)
-      // .get('/store', storePage)
       .post('/api/products', addProduct)
       .get('/api/products', getProducts)
       .get('/api/incart', getCartProducts)
@@ -28,7 +29,12 @@ router.get('/', home)
       .patch('/api/deletefromcart/:id', deleteFromtCart)
       .get('/login', loginPage)
       .get('/register', registerPage)
-      .get('/store', userMiddleware, storePage)
+      .get('/store', storePage)
+      .get('/gitHub', OauthOne)
+      .get('/linkedin', LOauthOne)
+      // .get('/auth/linkedin/callback', LOauthTwo, storePage)
+      .get('/auth/github/callback', OauthTwo, storePage)
+      // .get('/auth/linkedin/callback', LOauthTwo, storePage)
  
    
       

@@ -26,6 +26,7 @@ export const loginPage = async (ctx: any) => {
   }
 
   export const storePage = async (ctx: any) => {
+    
     ctx.response.body = await renderFileToString(
       `${Deno.cwd()}/views/store.ejs`,
       {},

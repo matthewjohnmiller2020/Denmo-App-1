@@ -1,8 +1,7 @@
 
 import { Client } from "https://deno.land/x/postgres/mod.ts"
 import { decode } from "https://deno.land/x/djwt@v2.4/mod.ts"
-import { renderFileToString } from "https://deno.land/x/dejs@0.10.2/mod.ts";
-import { storePage } from '../controllers/render.ts'
+// import { storePage } from '../controllers/render.ts'
 // import { dashport } from '../server.ts'
 // import { ghStrat, serializerA, deserializerA } from '../dashportConfig.ts';
 import { dbCreds } from '../config.ts'
@@ -10,7 +9,8 @@ import { dbCreds } from '../config.ts'
 const client = new Client(dbCreds);
 
 const userMiddleware: any = async (ctx:any, next:any) => {
-    const jwt = await ctx.cookies.get("jwt") || '';
+    const jwt = await ctx.cookies.get("jwt") || '' ;
+    const test = await ctx.cookies.get("test") || '' ;
     if (!jwt) {
         ctx.response.body = 401;
         ctx.response.body = {
@@ -24,8 +24,6 @@ const userMiddleware: any = async (ctx:any, next:any) => {
     const decoded: any = await decode(jwt);
     const user: any[] = decoded[1].user
 
-    // const result = await verify(jwt, key);
-    
 
     // const result = await verify(jwt, key);
     // console.log(`payload ${payload}`)
@@ -47,26 +45,10 @@ const userMiddleware: any = async (ctx:any, next:any) => {
         };
         return
     }
-    console.log(next)
-    console.log(typeof next)
     await next()
-    // dashport.authenticate(ghStrat, serializerA, deserializerA)
-    // try {
-    //     response.body = await renderFileToString(
-    //         `${Deno.cwd()}/views/store.ejs`,
-    //         {},
-    //       );
-    // } catch (error) {
-    //     response.body = error.toString();
-    // }
+
     return
 }
   
   export {userMiddleware};
 
-//   router.get('/store', 
-//   dashport.authenticate(ghStrat, serializerA, deserializerA),
-//   async (ctx: any, next: any) => {
-//     ctx.response.body = 'This is a private page!';
-//   }
-// )

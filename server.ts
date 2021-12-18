@@ -1,10 +1,25 @@
 import { Application } from "https://deno.land/x/oak/mod.ts"
 import { oakCors } from "https://deno.land/x/cors/mod.ts";
-import { DashportOak } from 'https://deno.land/x/dashport@v1.2.1/mod.ts';
-import { renderFileToString } from "https://deno.land/x/dejs@0.10.2/mod.ts";
-import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
+// import { OAuth2Client } from "https://deno.land/x/oauth2_client/mod.ts";
+// import { config } from "https://deno.land/x/dotenv/mod.ts";
+// import { DashportOak } from 'https://deno.land/x/dashport@v1.2.1/mod.ts';
+// import { renderFileToString } from "https://deno.land/x/dejs@0.10.2/mod.ts";
+// import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
+import router from './routes.ts'
 
+// const obj = config()
+// const clientKey = Object.values(obj)[1]
 
+// const oauth2Client = new OAuth2Client({
+//   clientId: '8d769a8e565111f853fb',
+//   clientSecret: clientKey,
+//   authorizationEndpointUri: "https://github.com/login/oauth/authorize",
+//   tokenUri: "https://github.com/login/oauth/access_token",
+//   redirectUri: "http://localhost:3000/auth/github/callback",
+//   defaults: {
+//     scope: "read:user",
+//   },
+// });
 
 
 // import onyx from 'https://deno.land/x/onyx/mod.ts'
@@ -16,17 +31,41 @@ import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
 //     engineFactory,
 //     adapterFactory
 // } from 'https://deno.land/x/view_engine/mod.ts';
-import router from './routes.ts'
+
 
 // const ejsEngine = engineFactory.getEjsEngine();
 // const oakAdapter = adapterFactory.getOakAdapter();
 
+// router.get("/gitHub", (ctx) => {
+//   ctx.response.redirect(
+//     oauth2Client.code.getAuthorizationUri(),
+//   );
+// });
+
+// router.get("/auth/github/callback", async (ctx) => {
+//   // Exchange the authorization code for an access token
+//   const tokens = await oauth2Client.code.getToken(ctx.request.url);
+
+//   // Use the access token to make an authenticated API request
+//   const userResponse = await fetch("https://api.github.com/user", {
+//     headers: {
+//       Authorization: `Bearer ${tokens.accessToken}`,
+//     },
+//   });
+//   const { name } = await userResponse.json();
+
+//   // ctx.response.body = `Hello, ${name}!`;
+//   ctx.response.body = await renderFileToString(
+//     `${Deno.cwd()}/views/store.ejs`,
+//     {},
+//   );
+// });
 
 
 const port: String|any =  Deno.env.get("PORT") || 3000
 const app = new Application()
 
-export const dashport: any = new DashportOak(app);
+// export const dashport: any = new DashportOak(app);
 
 
 
