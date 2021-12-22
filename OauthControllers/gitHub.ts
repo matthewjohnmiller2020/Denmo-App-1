@@ -21,6 +21,18 @@ const oauth2Client = new OAuth2Client({
     },
   });
 
+const hardCode = 'https://github.com/login/oauth/authorize?response_type=code&client_id=8d769a8e565111f853fb&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fauth%2Fgithub%2Fcallback&scope=read%3Auser'
+
+const createLink: Function = (cliendId:String, redirect:any, scope:any) => {
+  const state: Number = Math.floor(Math.random() * 1000000000)
+  const encodeLink: any = encodeURIComponent(redirect)
+  const encodeScope: any = encodeURIComponent(scope)
+  let SampleLink: String = `https://github.com/login/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${encodeLink}&state=${state}&scope=${encodeScope}`
+  return SampleLink
+}
+
+console.log(createLink('8d769a8e565111f853fb', "http://localhost:3000/auth/github/callback", "read:user"))
+
 const OauthOne = async (ctx:any) => {
   let sessionId = Math.floor(Math.random() * 1000000000);
 

@@ -10,6 +10,7 @@ const clientKey = Object.values(obj)[2]
 const clientId:string = '8693ww7e9p6u3t'
 const redirect:string = "http://localhost:3000/store"
 const scope:string = 'r_emailaddress'
+let sessionId: String;
 
 const oauth2Client = new OAuth2Client({
     clientId: '8693ww7e9p6u3t',
@@ -23,13 +24,14 @@ const oauth2Client = new OAuth2Client({
   });
 
 // console.log(oauth2Client.config.redirectUri)
-let sessionId: String;
+
 
 // const SampleLink: String = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id={your_client_id}&redirect_uri={your_callback_url}&state=foobar&scope=r_liteprofile%20r_emailaddress%20w_member_social`
 
-const createLink: Function = (cliendId:String, redirect:String, scope:String) => {
+const createLink: Function = (cliendId:String, redirect:any, scope:String) => {
   const state: Number = Math.floor(Math.random() * 1000000000)
-  let SampleLink: String = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${cliendId}&redirect_uri=${redirect}&state=${state}&scope=${scope}`
+  const encode: String = encodeURIComponent(redirect)
+  let SampleLink: String = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${cliendId}&redirect_uri=${encode}&state=${state}&scope=${scope}`
   return SampleLink
 }
 
@@ -46,7 +48,7 @@ const LOauthOne = async (ctx:any, next:any) => {
         data: ctx.response.redirect(`https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=8693ww7e9p6u3t&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fstore&state=foobar&scope=r_liteprofile`)
         
     };
-    ctx.response.redirect("http://localhost:3000/store")
+    // ctx.response.redirect("http://localhost:3000/store")
     ctx.cookies.set('test', sessionId, {httpOnly: true})
 
     // const test = "test"
