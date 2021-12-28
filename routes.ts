@@ -5,7 +5,7 @@ import { addUser, loginUser, logout } from './controllers/users.ts'
 import { registerPage, loginPage, home, storePage } from './controllers/render.ts'
 import { userMiddleware } from './controllers/userMiddleware.ts'
 import { OauthOne, OauthTwo, sessionCheck } from './OauthControllers/gitHub.ts'
-import { LOauthOne, oauth2Clone } from './OauthControllers/LinkedIn.ts'
+import { LOauthOne, oauth2Clone, findCode } from './OauthControllers/LinkedIn.ts'
 // import { dashport } from './server.ts'
 import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
 
@@ -29,7 +29,7 @@ router.get('/', home)
       .patch('/api/deletefromcart/:id', deleteFromtCart)
       .get('/login', loginPage)
       .get('/register', registerPage)
-      .get('/store',  storePage)
+      .get('/store', storePage)
       .get('/gitHub', OauthOne)
       // .get('/gitHub', dashport.authenticate(ghStrat, serializerA, deserializerA), storePage)
       .get('/linkedin', LOauthOne)

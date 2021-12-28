@@ -35,22 +35,30 @@ const createLink: Function = (cliendId:String, redirect:any, scope:String) => {
   return SampleLink
 }
 
-console.log(createLink(clientId, redirect, scope))
+// console.log(createLink(clientId, redirect, scope))
+
 
 
 
 const LOauthOne = async (ctx:any, next:any) => {
-    let sessionId: Number = Math.floor(Math.random() * 1000000000);
-    await client.connect()
-    await client.queryObject("INSERT INTO session(session_id) VALUES($1)", sessionId)
+    // let sessionId: Number = Math.floor(Math.random() * 1000000000);
+    // await client.connect()
+    // await client.queryObject("INSERT INTO session(session_id) VALUES($1)", sessionId)
     ctx.response.body = {
         message: 'success',
         data: ctx.response.redirect(`https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=8693ww7e9p6u3t&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fstore&state=foobar&scope=r_liteprofile`)
         
+        
     };
     // ctx.response.redirect("http://localhost:3000/store")
-    ctx.cookies.set('test', sessionId, {httpOnly: true})
+    // ctx.cookies.set('test', sessionId, {httpOnly: true})
+    // findCode()
+/**
+ * const pathString = string.subString(string.indexOf('code=')+5, string.length);
+ */
 
+
+    // await next()
     // const test = "test"
     // await fetch(ctx.request.url, {
     //   headers: {
@@ -58,6 +66,64 @@ const LOauthOne = async (ctx:any, next:any) => {
     //   }
     // })
 }
+
+// const getToken: Function = () => {
+//   fetch('https://www.linkedin.com/oauth/v2/accessToken',{
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/x-www-form-urlencoded',
+//     'grant_type': 'client_credentials',
+//     'client_id': `${clientId}`,
+//     'client_secret': `${clientKey}`
+//   }
+// }).then((tokenData) => {
+//   console.log('First field should be token: ', tokenData);
+// })
+  
+// }
+
+const findCode = async (ctx:any, next:any) => {
+  const stringPathName: String = ctx.request.url;
+
+  const code: String = JSON.stringify(stringPathName.search) 
+  const parsedCode = code.slice(code.indexOf('"?code=')+7, code.indexOf('&state'))
+  console.log(parsedCode)
+
+  const tokens = await fetch('https://www.linkedin.com/oauth/v2/accessToken',{
+  method: 'POST',
+  // headers: {
+  //   'Accept': 'application/json',
+  //   'Content-Type': 'application/json'
+  // },
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'grant_type': 'authorization_code',
+    'code': `${parsedCode}`,
+    'redirect_uri': "http://localhost:3000/store",
+    'client_id': `${clientId}`,
+    'client_secret': `${clientKey}`
+  }
+
+})
+// ctx.response.json().then(data => {
+//   console.log(data);
+  console.log(tokens)
+  return await next();
+}
+
+
+
+// const testCase: String = 'https://dev.example.com/auth/linkedin/callback?state=foobar&code=AQTQmah11lalyH65DAIivsjsAQV5P-1VTVVebnLl_SCiyMXoIjDmJ4s6rO1VBGP5Hx2542KaR_eNawkrWiCiAGxIaV-TCK-mkxDISDak08tdaBzgUYfnTJL1fHRoDWCcC2L6LXBCR_z2XHzeWSuqTkR1_jO8CeV9E_WshsJBgE-PWElyvsmfuEXLQbCLfj8CHasuLafFpGb0glO4d7M'
+// console.log(findCode())
+
+// POST https://www.linkedin.com/oauth/v2/accessToken 
+
+// Content-Type: application/x-www-form-urlencoded
+// grant_type=client_credentials
+// client_id={your_client_id}
+// client_secret={your_client_secret}
+
+
     // await next()
     // ctx.cookies.set('jwt', 'tokens.accessToken', {httpOnly: true})
     // const jwt = await ctx.cookies.get("jwt") || ''
@@ -94,17 +160,17 @@ const oauth2Clone = async (ctx: any) => {
 
 
   const LOauthTwo = async (ctx:any, next:any) => {
-      console.log(oauth2Client)
+      // console.log(oauth2Client)
     // Exchange the authorization code for an access token
-    const tokens = await oauth2Client.code.getToken(ctx.request.url);
-    console.log(`tokens ${tokens}`)
+    // const tokens = await oauth2Client.code.getToken(ctx.request.url);
+    // console.log(`tokens ${tokens}`)
     // Use the access token to make an authenticated API request
-    const userResponse = await fetch("https://api.linkedin.com/v2/me", {
-      headers: {
-        Authorization: `Bearer ${tokens.accessToken}`,
-      },
-    });
-    ctx.cookies.set('jwt', tokens.accessToken, {httpOnly: true})
+    // const userResponse = await fetch("https://api.linkedin.com/v2/me", {
+    //   headers: {
+    //     Authorization: `Bearer ${tokens.accessToken}`,
+    //   },
+    // });
+    // ctx.cookies.set('jwt', tokens.accessToken, {httpOnly: true})
     // console.log(userResponse)
     // const { name } = await userResponse.json();
     // console.log(name)
@@ -112,4 +178,4 @@ const oauth2Clone = async (ctx: any) => {
 
   };
 
-  export { LOauthOne, oauth2Clone }
+  export { LOauthOne, oauth2Clone, findCode }

@@ -7,7 +7,7 @@ const client = new Client(dbCreds);
 
 const obj = config()
 const clientKey = Object.values(obj)[1]
-
+const clientId:string = '8d769a8e565111f853fb'
 let sessionId: String;
 
 const oauth2Client = new OAuth2Client({
@@ -30,24 +30,50 @@ const createLink: Function = (cliendId:String, redirect:any, scope:any) => {
   let SampleLink: String = `https://github.com/login/oauth/authorize?response_type=code&client_id=${cliendId}&redirect_uri=${encodeLink}&state=${state}&scope=${encodeScope}`
   return SampleLink
 }
-
-console.log(createLink('8d769a8e565111f853fb', "http://localhost:3000/auth/github/callback", "read:user"))
+const redirectGHLink = createLink('8d769a8e565111f853fb', "http://localhost:3000/auth/github/callback", "read:user")
+// console.log(redirectGHLink)
 
 const OauthOne = async (ctx:any) => {
   let sessionId = Math.floor(Math.random() * 1000000000);
 
   try {
-    await client.connect()
-    await client.queryObject("INSERT INTO session(session_id) VALUES($1)", sessionId)
-    ctx.response.redirect(
-      oauth2Client.code.getAuthorizationUri(),
-    );
+    // await client.connect()
+    // await client.queryObject("INSERT INTO session(session_id) VALUES($1)", sessionId)
+    ctx.response.body = {
+      message: 'success',
+      data: ctx.response.redirect(redirectGHLink)
+      
+  };
+    // ctx.cookies.set('test', sessionId, {httpOnly: true})
   } catch(err) {
     return err;
   }
   };
   
+  // const token: String = '6f8fa69ebe3d77e856b4&state=326957956'
   const OauthTwo = async (ctx:any, next:any) => {
+    const stringPathName: String = ctx.request.url;
+
+    const code: String = JSON.stringify(stringPathName.search) 
+    console.log(code)
+    const parsedCode = code.slice(code.indexOf('"?code=')+7, code.indexOf('&state'))
+    console.log(parsedCode)
+
+    const tokens = await fetch('https://github.com/login/oauth/access_token',{
+    method: 'POST',
+      headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+    },
+    body: `{
+      'client_id': ${clientId},
+      'client_secret': ${clientKey},
+      'code': ${parsedCode},
+      'redirect_uri': "http://localhost:3000/auth/github/callback"
+  }`,
+})
+
+  console.log(tokens)
     
     // Exchange the authorization code for an access token
     // const tokens = await oauth2Client.code.getToken(ctx.request.url);
@@ -59,8 +85,9 @@ const OauthOne = async (ctx:any) => {
     //   },
     // });
     // console.log(userResponse)
-    ctx.response.redirect("http://localhost:3000/store")
-    ctx.cookies.set('test', sessionId, {httpOnly: true})
+    // ctx.response.redirect("http://localhost:3000/store")
+    // ctx.cookies.set('test', sessionId, {httpOnly: true})
+
     await next()
     
   };
@@ -92,6 +119,8 @@ const OauthOne = async (ctx:any) => {
     return;
   }
 };  
+
+
 
   //    console.log(`url ${ctx.request.url}`)
   // console.log(JSON.stringify(tokens.accessToken))
