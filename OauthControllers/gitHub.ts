@@ -33,7 +33,7 @@ const createLink: Function = (cliendId:String, redirect:any, scope:any) => {
 const redirectGHLink = createLink('8d769a8e565111f853fb', "http://localhost:3000/auth/github/callback", "read:user")
 // console.log(redirectGHLink)
 
-const OauthOne = async (ctx:any) => {
+const OauthOne = async (ctx:any, next:any) => {
   let sessionId = Math.floor(Math.random() * 1000000000);
 
   try {
@@ -48,6 +48,7 @@ const OauthOne = async (ctx:any) => {
   } catch(err) {
     return err;
   }
+  // await next()
   };
   
   // const token: String = '6f8fa69ebe3d77e856b4&state=326957956'
@@ -55,9 +56,9 @@ const OauthOne = async (ctx:any) => {
     const stringPathName: String = ctx.request.url;
 
     const code: String = JSON.stringify(stringPathName.search) 
-    console.log(code)
+    // console.log(code)
     const parsedCode = code.slice(code.indexOf('"?code=')+7, code.indexOf('&state'))
-    console.log(parsedCode)
+    // console.log(parsedCode)
 
     const tokens = await fetch('https://github.com/login/oauth/access_token',{
     method: 'POST',
@@ -65,12 +66,12 @@ const OauthOne = async (ctx:any) => {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
     },
-    body: `{
-      'client_id': ${clientId},
-      'client_secret': ${clientKey},
-      'code': ${parsedCode},
-      'redirect_uri': "http://localhost:3000/auth/github/callback"
-  }`,
+    body: JSON.stringify({
+      client_id: clientId,
+      client_secret: clientKey,
+      code: parsedCode,
+      redirect_uri: "http://localhost:3000/auth/github/callback"
+  }),
 })
 
   console.log(tokens)

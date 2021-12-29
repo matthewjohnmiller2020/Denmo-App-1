@@ -8,7 +8,8 @@ const client = new Client(dbCreds);
 const obj = config()
 const clientKey = Object.values(obj)[2]
 const clientId:string = '8693ww7e9p6u3t'
-const redirect:string = "http://localhost:3000/store"
+// const redirect:string = "http://localhost:3000/store"
+const redirect:string = "http://localhost:3000/auth/linkedin/callback"
 const scope:string = 'r_emailaddress'
 let sessionId: String;
 
@@ -36,7 +37,7 @@ const createLink: Function = (cliendId:String, redirect:any, scope:String) => {
 }
 
 // console.log(createLink(clientId, redirect, scope))
-
+const newLink = createLink(clientId, redirect, scope)
 
 
 
@@ -44,9 +45,15 @@ const LOauthOne = async (ctx:any, next:any) => {
     // let sessionId: Number = Math.floor(Math.random() * 1000000000);
     // await client.connect()
     // await client.queryObject("INSERT INTO session(session_id) VALUES($1)", sessionId)
+    // ctx.response.body = {
+    //     message: 'success',
+    //     data: ctx.response.redirect(`https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=8693ww7e9p6u3t&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fstore&state=foobar&scope=r_liteprofile`)
+        
+        
+    // };
     ctx.response.body = {
         message: 'success',
-        data: ctx.response.redirect(`https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=8693ww7e9p6u3t&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fstore&state=foobar&scope=r_liteprofile`)
+        data: ctx.response.redirect(newLink)
         
         
     };
@@ -91,18 +98,18 @@ const findCode = async (ctx:any, next:any) => {
 
   const tokens = await fetch('https://www.linkedin.com/oauth/v2/accessToken',{
   method: 'POST',
-  // headers: {
-  //   'Accept': 'application/json',
-  //   'Content-Type': 'application/json'
-  // },
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'grant_type': 'authorization_code',
-    'code': `${parsedCode}`,
-    'redirect_uri': "http://localhost:3000/store",
-    'client_id': `${clientId}`,
-    'client_secret': `${clientKey}`
-  }
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    // Content-Type: "application/x-www-form-urlencoded",
+    grant_type: "authorization_code",
+    code: parsedCode,
+    redirect_uri: newLink,
+    client_id: clientId,
+    client_secret: clientKey
+  })
 
 })
 // ctx.response.json().then(data => {

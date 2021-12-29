@@ -33,7 +33,7 @@ router.get('/', home)
       .get('/gitHub', OauthOne)
       // .get('/gitHub', dashport.authenticate(ghStrat, serializerA, deserializerA), storePage)
       .get('/linkedin', LOauthOne)
-      // .get('/auth/linkedin/callback', LOauthTwo, storePage)
+      .get('/auth/linkedin/callback', findCode, storePage)
       .get('/auth/github/callback', OauthTwo, storePage)
       // .get('/auth/linkedin/callback', LOauthTwo, storePage)
  
