@@ -13,16 +13,16 @@ const redirect:string = "http://localhost:3000/auth/linkedin/callback"
 const scope:string = 'r_emailaddress'
 let sessionId: String;
 
-const oauth2Client = new OAuth2Client({
-    clientId: '8693ww7e9p6u3t',
-    clientSecret: clientKey, 
-    authorizationEndpointUri: 'https://www.linkedin.com/oauth/v2/authorization',
-    tokenUri: "https://api.linkedin.com/v2/me",
-    redirectUri: "http://localhost:3000/store",
-    defaults: {
-      scope: "read:user",
-    },
-  });
+// const oauth2Client = new OAuth2Client({
+//     clientId: '8693ww7e9p6u3t',
+//     clientSecret: clientKey, 
+//     authorizationEndpointUri: 'https://www.linkedin.com/oauth/v2/authorization',
+//     tokenUri: "https://api.linkedin.com/v2/me",
+//     redirectUri: "http://localhost:3000/store",
+//     defaults: {
+//       scope: "read:user",
+//     },
+//   });
 
 // console.log(oauth2Client.config.redirectUri)
 
@@ -91,30 +91,48 @@ const LOauthOne = async (ctx:any, next:any) => {
 
 const findCode = async (ctx:any, next:any) => {
   const stringPathName: String = ctx.request.url;
-
-  const code: String = JSON.stringify(stringPathName.search) 
+  
+  const code: String = JSON.stringify(stringPathName.search)
   const parsedCode = code.slice(code.indexOf('"?code=')+7, code.indexOf('&state'))
-  console.log(parsedCode)
+  console.log(`parsedCode ${parsedCode}`)
+
 
   const tokens = await fetch('https://www.linkedin.com/oauth/v2/accessToken',{
   method: 'POST',
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    // 'Accept': 'application/json',
+    // "Content-type": "application/json"
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
   },
-  body: JSON.stringify({
-    // Content-Type: "application/x-www-form-urlencoded",
-    grant_type: "authorization_code",
-    code: parsedCode,
-    redirect_uri: newLink,
-    client_id: clientId,
-    client_secret: clientKey
+    //  body: `grant_type=authorization_code&
+    //  code=${parsedCode}
+    //  &redirect_uri=${redirect}
+    //  &client_id=${clientId}
+    //  &client_secret=${clientKey}`
+  // body: JSON.stringify({
+  //   grant_type: "authorization_code",
+  //   code: parsedCode,
+  //   redirect_uri: redirect,
+  //   client_id: clientId,
+  //   client_secret: clientKey
+  // })
+  body: new URLSearchParams({
+    'grant_type': "authorization_code",
+    'code': parsedCode,
+    'redirect_uri': redirect,
+    'client_id': clientId,
+    'client_secret': clientKey
   })
-
+ })
+ .then((response: any) => {
+  console.log(response)
+  return response.text()
 })
-// ctx.response.json().then(data => {
-//   console.log(data);
-  console.log(tokens)
+.then((paramsString: any) => {
+  let params = new URLSearchParams(paramsString)
+    console.log(params);
+ })
+ 
   return await next();
 }
 
@@ -151,7 +169,7 @@ const findCode = async (ctx:any, next:any) => {
 
 // const hardCode = "AQRQtZgS_T-LpTFQTnBKkzu2D98OJnhu7I8fZOR-K24QbTlakD3yFb-KBjTsCvaCpPPSS6EnMp_ZUNe3M-CpKct7TJQamlyi3H9dlXiEvYQYyFaUcsOJN1Z-sYxNvvpMSxEu-01zsRLh5DohPYYcU0GOhmx2iwBl56uSQmYvVjkvEywe8kC1FPA07EGzgn2nyVF4ALmdKuJ6g9kFgHk"
 
-const oauth2Clone = async (ctx: any) => {
+// const oauth2Clone = async (ctx: any) => {
   // const  redirectUri: String = oauth2Client 
   // ctx.cookies.set('test', 'tokens.accessToken', {httpOnly: true});
   // const test = await ctx.cookies.get("test") || '';
@@ -162,8 +180,8 @@ const oauth2Clone = async (ctx: any) => {
   //   },
   // })
 
-  ctx.response.redirect(oauth2Client.config.redirectUri);
-}
+//   ctx.response.redirect(oauth2Client.config.redirectUri);
+// }
 
 
   const LOauthTwo = async (ctx:any, next:any) => {
@@ -185,4 +203,4 @@ const oauth2Clone = async (ctx: any) => {
 
   };
 
-  export { LOauthOne, oauth2Clone, findCode }
+  export { LOauthOne, findCode }

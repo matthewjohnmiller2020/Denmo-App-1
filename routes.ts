@@ -5,7 +5,7 @@ import { addUser, loginUser, logout } from './controllers/users.ts'
 import { registerPage, loginPage, home, storePage } from './controllers/render.ts'
 import { userMiddleware } from './controllers/userMiddleware.ts'
 import { OauthOne, OauthTwo, sessionCheck } from './OauthControllers/gitHub.ts'
-import { LOauthOne, oauth2Clone, findCode } from './OauthControllers/LinkedIn.ts'
+import { LOauthOne, findCode } from './OauthControllers/LinkedIn.ts'
 // import { dashport } from './server.ts'
 import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
 
