@@ -10,7 +10,7 @@ const clientKey = Object.values(obj)[2]
 const clientId:string = '8693ww7e9p6u3t'
 // const redirect:string = "http://localhost:3000/store"
 const redirect:string = "http://localhost:3000/auth/linkedin/callback"
-const scope:string = 'r_emailaddress'
+const scope:string = 'r_liteprofile'  //'r_emailaddress'
 let sessionId: String;
 
 // const oauth2Client = new OAuth2Client({
@@ -39,7 +39,16 @@ const createLink: Function = (cliendId:String, redirect:any, scope:String) => {
 // console.log(createLink(clientId, redirect, scope))
 const newLink = createLink(clientId, redirect, scope)
 
-
+const setBearerToken = async (bearToken: any) => {
+  const userResponse = await fetch("https://api.linkedin.com/v2/me", {
+    headers: {
+      Authorization: `Bearer ${bearToken}`,
+    },
+  });
+  const {localizedFirstName} = await userResponse.json()
+  console.log(`Hello ${localizedFirstName}`)
+  
+}
 
 const LOauthOne = async (ctx:any, next:any) => {
     // let sessionId: Number = Math.floor(Math.random() * 1000000000);
@@ -131,6 +140,32 @@ const findCode = async (ctx:any, next:any) => {
 .then((paramsString: any) => {
   let params = new URLSearchParams(paramsString)
     console.log(params);
+    let tokenKey = [];
+    for (const [key, value] of params.entries()){
+    // for (const key in params){
+      
+      tokenKey.push(key, value)
+    }
+    console.log(tokenKey[0])
+    let obj: any = tokenKey[0]
+    let values = Object.values(obj)
+    // console.log(values)
+    const tokenArr = []
+    let i = 17;
+    while (values[i] !== '"') {
+      tokenArr.push(values[i])
+      i++
+    }
+    const bearerToken = tokenArr.join('')
+    // obj = JSON.stringify(obj)
+    // // console.log(obj)
+    // let Btoken = [];
+    // for(const token in obj) {
+    //   Btoken.push(token)
+    // }
+    console.log('access_token', bearerToken)
+
+    setBearerToken(bearerToken)
  })
  
   return await next();
