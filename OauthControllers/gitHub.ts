@@ -71,10 +71,42 @@ const OauthOne = async (ctx:any, next:any) => {
       client_secret: clientKey,
       code: parsedCode,
       redirect_uri: "http://localhost:3000/auth/github/callback"
-  }),
+  })
+})
+.then((response: any) => {
+  console.log(response)
+  return response.text()
+})
+.then((paramsString: any) => {
+  let params = new URLSearchParams(paramsString)
+  // console.log(params)
+  let tokenKey = [];
+  for (const [key, value] of params.entries()){
+  // for (const key in params){
+    
+    tokenKey.push(key, value)
+  }
+  console.log(tokenKey[0])
+  let obj: any = tokenKey[0]
+  let values = Object.values(obj)
+  // console.log(values)
+  const tokenArr = []
+  let i = 17;
+  while (values[i] !== '"') {
+    tokenArr.push(values[i])
+    i++
+  }
+  console.log(tokenArr.join(''))
+  obj = JSON.stringify(obj)
+  // console.log(obj)
+  let Btoken = [];
+  for(const token in obj) {
+    Btoken.push(token)
+  }
+  // console.log('access_token', Btoken)
 })
 
-  console.log(tokens)
+  // console.log(tokens)
     
     // Exchange the authorization code for an access token
     // const tokens = await oauth2Client.code.getToken(ctx.request.url);
