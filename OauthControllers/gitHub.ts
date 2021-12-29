@@ -33,6 +33,17 @@ const createLink: Function = (cliendId:String, redirect:any, scope:any) => {
 const redirectGHLink = createLink('8d769a8e565111f853fb', "http://localhost:3000/auth/github/callback", "read:user")
 // console.log(redirectGHLink)
 
+const setBearerToken = async (bearToken: any) => {
+  const userResponse = await fetch("https://api.github.com/user", {
+    headers: {
+      Authorization: `Bearer ${bearToken}`,
+    },
+  });
+  const { name } = await userResponse.json()
+  console.log(`Hello ${name}`)
+  
+}
+
 const OauthOne = async (ctx:any, next:any) => {
   let sessionId = Math.floor(Math.random() * 1000000000);
 
@@ -74,7 +85,7 @@ const OauthOne = async (ctx:any, next:any) => {
   })
 })
 .then((response: any) => {
-  console.log(response)
+  // console.log(response)
   return response.text()
 })
 .then((paramsString: any) => {
@@ -96,14 +107,16 @@ const OauthOne = async (ctx:any, next:any) => {
     tokenArr.push(values[i])
     i++
   }
-  console.log(tokenArr.join(''))
-  obj = JSON.stringify(obj)
-  // console.log(obj)
-  let Btoken = [];
-  for(const token in obj) {
-    Btoken.push(token)
-  }
-  // console.log('access_token', Btoken)
+  const bearerToken = tokenArr.join('')
+  // obj = JSON.stringify(obj)
+  // // console.log(obj)
+  // let Btoken = [];
+  // for(const token in obj) {
+  //   Btoken.push(token)
+  // }
+  console.log('access_token', bearerToken)
+  
+  setBearerToken(bearerToken)
 })
 
   // console.log(tokens)
@@ -114,7 +127,7 @@ const OauthOne = async (ctx:any, next:any) => {
     // Use the access token to make an authenticated API request
     // const userResponse = await fetch("https://api.github.com/user", {
     //   headers: {
-    //     Authorization: `Bearer ${tokens.accessToken}`,
+    //     Authorization: `Bearer ${bearerToken}`,
     //   },
     // });
     // console.log(userResponse)
