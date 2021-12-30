@@ -6,7 +6,7 @@ import { registerPage, loginPage, home, storePage } from './controllers/render.t
 import { userMiddleware } from './controllers/userMiddleware.ts'
 import { OauthOne, OauthTwo, sessionCheck } from './OauthControllers/gitHub.ts'
 import { LOauthOne, findCode } from './OauthControllers/LinkedIn.ts'
-// import { dashport } from './server.ts'
+import { GOauthOne, findGoogleCode } from './OauthControllers/Google.ts'
 import { ghStrat, serializerA, deserializerA } from './dashportConfig.ts';
 
 // import { storeRender, purchase } from './controllers/stripe.ts'
@@ -35,6 +35,8 @@ router.get('/', home)
       .get('/linkedin', LOauthOne)
       .get('/auth/linkedin/callback', findCode, storePage)
       .get('/auth/github/callback', OauthTwo, storePage)
+      .get('/google', GOauthOne)
+      .get('/auth/google/callback', findGoogleCode, storePage)
       // .get('/auth/linkedin/callback', LOauthTwo, storePage)
  
    

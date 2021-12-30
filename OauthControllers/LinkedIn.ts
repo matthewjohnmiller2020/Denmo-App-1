@@ -149,7 +149,7 @@ const findCode = async (ctx:any, next:any) => {
     console.log(tokenKey[0])
     let obj: any = tokenKey[0]
     let values = Object.values(obj)
-    // console.log(values)
+    console.log(values)
     const tokenArr = []
     let i = 17;
     while (values[i] !== '"') {
