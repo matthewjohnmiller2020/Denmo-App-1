@@ -127,49 +127,50 @@ const loginUser = async ({ request, response, cookies }: {request: any, response
   }  
 }
 
-const jwtLogin = async ({response, cookies}: { response: any, cookies: any }) => {
-    const jwt = await cookies.get("jwt") || '';
-    console.log(typeof jwt)
-    if (!jwt) {
-        response.body = 401;
-        response.body = {
-            message: 'unauthenticated'
-        };
-        return;
-    }
+// const jwtLogin = async ({response, cookies}: { response: any, cookies: any }) => {
+//     const jwt = await cookies.get("jwt") || '';
+//     console.log(typeof jwt)
+//     if (!jwt) {
+//         response.body = 401;
+//         response.body = {
+//             message: 'unauthenticated'
+//         };
+//         return;
+//     }
 
  
 
-    // const [ header, payload, signature] = await decode(jwt);
-    const decoded: any = await decode(jwt);
-    console.log(decoded);
-    const user: any[] = decoded[1].user
-    console.log(user)
-    // const result = await verify(jwt, key);
+//     // const [ header, payload, signature] = await decode(jwt);
+//     const decoded: any = await decode(jwt);
+//     console.log(decoded);
+//     const user: any[] = decoded[1].user
+//     console.log(user)
+//     // const result = await verify(jwt, key);
     
 
-    // const result = await verify(jwt, key);
-    // console.log(`payload ${payload}`)
-    if (!user) {
-        response.body = 401;
-        response.body = {
-            message: 'unauthenticated'
-        };
-        return;
-    }
+//     // const result = await verify(jwt, key);
+//     // console.log(`payload ${payload}`)
+//     if (!user) {
+//         response.body = 401;
+//         response.body = {
+//             message: 'unauthenticated'
+//         };
+//         return;
+//     }
 
-    const result = await client.queryArray(`SELECT * FROM registration WHERE username = '${ user }'`)
-    if(!result) {
-        response.body = 401;
-        response.body = {
-            message: 'unauthenticated'
-        };
-        return;
-    }
-    response.body = {data: "still working"}
-    return
+//     const result = await client.queryArray(`SELECT * FROM registration WHERE username = '${ user }'`)
+//     console.log(result)
+//     if(!result) {
+//         response.body = 401;
+//         response.body = {
+//             message: 'unauthenticated'
+//         };
+//         return;
+//     }
+//     response.body = {data: "still working"}
+//     return
     
-}
+// }
 const logout = async ({response, cookies}: {response: any, cookies: any}) => {
     cookies.delete('jwt');
 
@@ -189,4 +190,4 @@ const logout = async ({response, cookies}: {response: any, cookies: any}) => {
 // }
 
 
-export { addUser, loginUser, jwtLogin,  logout }
+export { addUser, loginUser, logout }

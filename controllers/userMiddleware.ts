@@ -10,7 +10,6 @@ const client = new Client(dbCreds);
 
 const userMiddleware: any = async (ctx:any, next:any) => {
     const jwt = await ctx.cookies.get("jwt") || '' ;
-    const test = await ctx.cookies.get("test") || '' ;
     if (!jwt) {
         ctx.response.body = 401;
         ctx.response.body = {
